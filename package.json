@@ -1,0 +1,17 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "Discord bot for ...",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "debug": "nodemon --inspect bot.js"
+  },
+  "author": "Jake",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "mongoose": "^5.8.11"
+  }
+}
