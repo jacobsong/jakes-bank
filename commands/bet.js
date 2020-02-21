@@ -14,13 +14,6 @@ module.exports = {
     const embed = new Discord.RichEmbed().setColor("GREEN");
 
     try {
-      const wallet = await Wallet.findOne({ userId: msg.author.id });
-      
-      if (wallet === null) {
-        msg.reply("You don't have a wallet yet. Run the \`wallet\` command to create one");
-        return;
-      }
-      
       const events = await Event.find({});
       
       if (events.length === 0) {
@@ -45,18 +38,57 @@ module.exports = {
       try {
         msg.channel.send(embed);
         choice = await msg.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ["time"] });
-        const idx = parseInt(choice.first().content) - 1;
-        if ((idx <= events.length) && (idx >= 0)) {
-          event = events[idx];
+        choice = parseInt(choice.first().content) - 1;
+        if ((choice <= events.length) && (choice >= 0)) {
+          event = events[choice];
         } else {
           msg.reply("Not a valid event number");
           return;
         }
+
         msg.reply("Enter your wager amount:");
-        msg.reply(`Enter who your wager is for: (1) for `);
-      } catch (e) { return }
+        wagerAmt = await msg.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ["time"] });
+        wagerAmt = parseInt(wagerAmt.first().content);
+        if (wagerAmt <= 0 || isNaN(wagerAmt)) {
+          msg.reply("Not a valid amount");
+          return;
+        }
         
+        msg.reply(`Enter who your wager is for:\nType 1 for ${event.glad1}\nType 2 for ${event.glad2}`);
+        wagerFor = await msg.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ["time"] });
+        wagerFor = parseInt(wagerFor.first().content);
+        if (![1, 2].includes(wagerFor)) {
+          msg.reply("Not a valid choice");
+          return;
+        }
+      } catch (e) { return }
       
+      const wallet = await Wallet.findOne({ userId: msg.author.id });
+      
+      if (wallet === null) {
+        msg.reply("You don't have a wallet yet. Run the \`wallet\` command to create one");
+        return;
+      }
+
+      if (wagerAmt > wallet.balance) {
+        msg.reply("You don't have enough money");
+        return;
+      }
+
+      const exists = await Event.exists({ _id: event._id, wagers: { $elemMatch: { _id: msg.author.id } } })
+      if (exists) {
+        msg.reply("You already placed a wager for this event");
+        return;
+      }
+
+      await Event.updateOne(
+        { _id: event._id },
+        { $push: { wagers: { _id: msg.author.id, userName: msg.author.tag, wagerAmt: wagerAmt, wagerFor: wagerFor } } }
+      )
+      wallet.balance -= wagerAmt;
+      wallet.save();
+
+      msg.reply("Successfully placed your wager");
 
     } catch (e) {
       msg.reply("There was an error");
