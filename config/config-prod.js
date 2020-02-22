@@ -1,5 +1,5 @@
 module.exports = {
-  mongoURI: process.env.MONGO_,
-  token: process.env.TOKEN_,
-  prefix: process.env.PREFIX_
+  mongoURI: process.env.MONGO_BANK,
+  token: process.env.TOKEN_BANK,
+  prefix: process.env.PREFIX_BANK
 };
