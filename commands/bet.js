@@ -47,6 +47,11 @@ module.exports = {
             return;
           }
 
+          if (event.closed) {
+            msg.reply("Betting is closed for this event");
+            return;
+          }
+
           msg.reply("Enter your wager amount:");
           wagerAmt = await msg.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ["time"] });
           wagerAmt = parseInt(wagerAmt.first().content);

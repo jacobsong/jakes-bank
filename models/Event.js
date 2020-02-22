@@ -7,6 +7,7 @@ const eventSchema = new Schema(
     creatorName: String,
     creatorAvatar: String,
     date: String,
+    closed: { type: Boolean, default: false },
     glad1: String,
     glad2: String,
     stream: String,
