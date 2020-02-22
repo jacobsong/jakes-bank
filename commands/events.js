@@ -11,6 +11,7 @@ module.exports = {
   usage: undefined,
   async execute(msg, args) {
     const embed = new Discord.RichEmbed().setColor("BLUE");
+    const embed2 = new Discord.RichEmbed().setColor("BLUE");
 
     try {
       const events = await Event.find({});
@@ -38,8 +39,21 @@ module.exports = {
         
       const idx = parseInt(choice.first().content) - 1;
       if ((idx <= events.length) && (idx >= 0)) {
+        let wagersList1 = "";
+        let wagersList2 = "";
         const event = events[idx];
-        embed.setAuthor(`Event created by ${event.creatorName}`, event.creatorAvatar)
+        const glad1Wagers = event.wagers.filter(wager => wager.wagerFor === 1);
+        const glad2Wagers = event.wagers.filter(wager => wager.wagerFor === 2);
+        
+        glad1Wagers.forEach(bet => {
+          wagersList1 += `${bet.userName} bet ${bet.wagerAmt}\n`;
+        });
+        
+        glad2Wagers.forEach(bet => {
+          wagersList2 += `${bet.userName} bet ${bet.wagerAmt}\n`;
+        });
+
+        embed2.setAuthor(`Event created by ${event.creatorName}`, event.creatorAvatar)
           .addField(`**Date**`, event.date, true)
           .addBlankField(true)
           .addField(`**Stream Link**`, event.stream, true)
@@ -49,9 +63,11 @@ module.exports = {
           .addField(`**${event.glad1}'s Wager Pool**`, event.glad1Pool, true)
           .addBlankField(true)
           .addField(`**${event.glad2}'s Wager Pool**`, event.glad2Pool, true)
-          .addField(`**Total Prize Pool**`, event.glad1Pool + event.glad2Pool, true)
+          .addField(`**${event.glad1}'s Wagers**`, wagersList1 || "No bets", true)
+          .addBlankField(true)
+          .addField(`**${event.glad2}'s Wagers**`, wagersList2 || "No bets", true)
           .setFooter(`Event ID: ${event._id}`);
-        msg.channel.send(embed);
+        msg.channel.send(embed2);
       } else {
         msg.reply("Not a valid event number");
         return;
