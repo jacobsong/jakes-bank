@@ -4,7 +4,7 @@ const Wallet = require("../models/Wallet");
 
 module.exports = {
   name: "finish",
-  description: "Finish an event",
+  description: "Declare a winner for an event and distribute all winnings",
   guildOnly: true,
   roleRequired: 1, // 0=None, 1=Staff, 2=Admin
   argsRequired: 0,

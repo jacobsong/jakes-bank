@@ -2,7 +2,7 @@ const Event = require("../models/Event");
 
 module.exports = {
   name: "new-event",
-  description: "Create a new gladiator event for people to wager on (respond within 60 seconds)",
+  description: "Create a new gladiator event for people to wager on",
   guildOnly: true,
   roleRequired: 1, // 0=None, 1=Staff, 2=Admin
   argsRequired: 0,

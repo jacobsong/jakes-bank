@@ -3,7 +3,7 @@ const Wallet = require("../models/Wallet");
 
 module.exports = {
   name: "wallet",
-  description: "Display your balance",
+  description: "Display your balance and stats",
   guildOnly: true,
   roleRequired: 0, // 0=None, 1=Staff, 2=Admin
   argsRequired: 0,
