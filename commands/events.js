@@ -10,7 +10,7 @@ module.exports = {
   mentionsRequired: 0,
   usage: undefined,
   async execute(msg, args) {
-    const embed = new Discord.RichEmbed().setColor("PURPLE");
+    const embed = new Discord.RichEmbed().setColor("BLUE");
 
     try {
       const events = await Event.find({});
