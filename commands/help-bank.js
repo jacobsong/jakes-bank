@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "help",
+  name: "help-bank",
   description: "List all of my commands",
   guildOnly: false,
   roleRequired: 0, // 0=None, 1=Staff, 2=Admin
