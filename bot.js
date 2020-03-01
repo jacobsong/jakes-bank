@@ -17,15 +17,15 @@ for (const file of commandFiles) {
 
 // Verify connected and set presence
 client.once("ready", () => {
-  console.log("Connected as " + client.user.tag);
+  console.log(`Connected as ${client.user.tag}\n`);
   client.user.setPresence({ game: { name: `type ${config.prefix}help-bank` } });
 });
 
 
 // Connect to MongoDB Atlas
 mongoose.connect(config.mongoURI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(
-  () => { console.log("MongoDB connected...\n"); },
-  err => { console.log("MongoDB could not connect...\n" + err); }
+  () => { console.log("MongoDB connected..."); },
+  err => { console.log("MongoDB could not connect..." + err); }
 );
 
 
